@@ -1,0 +1,21 @@
+Skill artwork by Dani Melich (https://dunpixel.itch.io).
+Source: 30 Free Pixel Art Skill Icons.
+Used with permission for personal and commercial games.
+This game-specific atlas is not a standalone asset pack.
+Do not extract, resell or redistribute artwork separately.
+
+LICENSE
+
+You may:
+- Use these assets in personal and commercial projects.
+- Modify the assets for your own project.
+- Use the assets in released games, prototypes, videos, marketing images, and UI mockups.
+
+You may not:
+- Resell, redistribute, repackage, or upload the raw asset files.
+- Include the raw files in another asset pack, tool, generator, or marketplace product.
+- Claim the original asset pack as your own.
+
+Credit is appreciated but not required.
+
+Creator: Dani Melich

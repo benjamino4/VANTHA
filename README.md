@@ -1,80 +1,138 @@
-# VANTHA — Turn-Based Clash
+# VANTHA DUEL
 
-A complete 2D turn-based battle system for a Telegram Mini App. Liquid Glass over OLED black, gold and crimson light, no emoji anywhere — every icon is hand-drawn inline SVG.
+A 90-second, five-turn card duel that lives inside Telegram. Two players, one glass table, one fuse. Everything resolves on the client in under a minute — no lobbies, no waiting, no scrolling.
 
-Open `index.html` in a browser and it runs. No build step, no framework, no network fetch of its own (only the optional Google Fonts link; system serif/sans fall back cleanly offline).
+Open `index.html` and it runs. No build step, no package install, no network calls.
 
 ---
 
-## Files
+## Stack mapping
 
-| File | Contents |
+The brief called for React + Tailwind + Framer Motion + `@telegram-apps/sdk-react` + PixiJS + Howler. This build keeps the *behaviour* of that stack and drops the bundler, so the game opens from a file, from any static host, or from inside Telegram with zero setup.
+
+| Brief | Shipped | Why |
+| --- | --- | --- |
+| React component tree | Declarative DOM sections + a single state object `S` and a `paint()` renderer | Same unidirectional flow (state in, DOM out) without a 40 kB runtime or JSX transform. One file to read, one place to debug. |
+| Tailwind | Hand-authored CSS with design tokens (`--gold`, `--crimson`, `--violet`, glass recipe) | The visual system is bespoke — 8-layer glass, concentric radii, mask-composite rings. Utility classes would have been rewritten anyway. |
+| Framer Motion | Native spring easing (`cubic-bezier` overshoot), `@property` driven conic angles, `transition` choreography, custom 3D tilt on `pointermove` | Identical choreography: spring-in cards, hover tilt, hit-stop, shake, flash. Hardware-composited transforms only. |
+| `@telegram-apps/sdk-react` | `window.Telegram.WebApp` directly (`ready`, `expand`, `disableVerticalSwipes`, `HapticFeedback`, `MainButton`, `openTelegramLink`) | The SDK is a typed wrapper around the same object. Calling it directly removes a npm dependency and keeps the haptic fallback explicit. |
+| PixiJS | Canvas 2D sprite pool (`#fx`) — the brief's sanctioned alternative | WebGL context loss inside Telegram's in-app WebView is a real failure mode; 2D canvas is stable and fast enough for ~120 short-lived particles. |
+| Howler | Web Audio API synthesis (`clang`, `thud`, `whoosh`, `tick`, `chime`) — the brief's sanctioned alternative | Zero audio assets, zero decode latency, zero 404s. Sounds are generated on demand and muted by default until the first tap. |
+
+Everything is locked to a 360 × 640 portrait viewport with `100dvh`, `overflow: hidden`, and `touch-action: none`. No scroll, ever.
+
+---
+
+## Mechanics
+
+| System | Rule |
 | --- | --- |
-| `index.html` | 360×640 stage, inline SVG icon library, enemy card, clash arena, player panel, hand, action buttons, verdict overlay. |
-| `style.css` | The whole visual system: glass recipe, typography, hidden-stat chips, HP bars, cards, buttons, and every keyframe (`shake`, `cardFly`, `floatDamage`, `fxFrames`, `fxCore`, `chipFlip`, `pipPop`). |
-| `app.js` | State, turn loop, card resolution, enemy AI, sight reveals, FX choreography, verdict, haptics, keyboard. |
-| `assets/impact.png` | 8×8 atlas (64 frames) — the clash burst. |
-| `assets/burst.png` | Heavy-attack burst atlas. |
-| `assets/ring.png` | Arcane ring atlas, played when a card is cast. |
-| `assets/sight.png` | Spark atlas for Foresight reveals. |
+| **EP economy** | Start at 4. `ATTACK` and `GUARD` each grant +2 EP (cap 8). Skill cards cost 2–4. |
+| **Turn** | One action per turn. Five turns total, then the verdict. |
+| **Damage** | `ATK × multiplier − DEF × 0.5`, floored at 1. Soul charge adds a flat bonus at 100. |
+| **Attack** | Damages the foe and opens the **discard ritual** — a card must be spent to the grave. |
+| **Guard** | Raises block for one incoming hit and refunds EP. Cannot be chained freely. |
+| **Trap** | Armed on your card as a visible aura. Enemy strikes can be reflected for 80% of their damage. |
+| **Dispel** | Clears the foe's armed trap — the read that beats a counter. |
+| **Soul Meter** | Every card that enters the grave charges the meter (+22). At 100 the next attack lands with a **SOUL BURST**. |
+| **Fuse** | 15 seconds per turn. The bar under your card burns down; expiring auto-guards and costs the turn. |
+| **Final Climax** | From turn 5 the arena turns crimson, the fuse shortens, and multipliers climb. |
+| **Tells** | The foe's intent is always legible: `WILL STRIKE · n DMG`, `GUARDING · BRACING`, `COUNTER ARMED · UNKNOWN`, `GRAVE LANCE · n DMG`. |
+| **Verdict** | Win, lose, or draw on HP. MVP moment, damage, turns, shards, frame tier, instant rematch. |
 
 ---
 
-## How a turn works
+## Screen map (360 × 640)
 
-1. **3 AP** refill at the start of every player turn, and the hand is redrawn to five cards.
-2. **Tap a card** — it costs its AP, flies to the centre of the arena, resolves, and the slot is cleared.
-3. **Basic Attack** (1 AP) always available — a steady hit when your hand is expensive.
-4. **End Turn** — AP drains, the enemy resolves the intent it has been telegraphing, then your next turn begins.
-
-The enemy's intent is shown in the arena for the whole turn (`WILL STRIKE · 13 DMG`), and every third turn it becomes a `GRAVE LANCE` heavy. Once you land your first hit its real HP numbers appear; before that the bar moves but reads `???`.
-
----
-
-## Hidden information
-
-The four enemy stats sit veiled at `???`. **Foresight** (1 AP) breaks one veil, **Second Sight** (2 AP) breaks two. Each reveal flips the chip on its X axis, swaps the value mid-rotation, turns the chip gold, and pushes a spark burst across the arena.
-
-A sight card is only force-fed into your opening hand while *nothing* is revealed. After that the deck decides — no dead slots.
-
----
-
-## The juice, in order
-
-1. **`cardFly`** — a ghost clone of the card launches from the hand, arcs to the arena centre, shrinks and vanishes (440ms).
-2. **`shake`** — the stage itself jolts through ten decaying steps. It animates the independent `translate`/`rotate` properties, so it never fights the scale transform used to fit the 360×640 frame.
-3. **`floatDamage`** — the number rises off the enemy card, overshoots, settles and fades; crits are larger and gold.
-4. **`fxFrames`** — the 8×8 atlas plays its 64 frames in 0.6s, plus **`fxCore`**, a hot centre flash.
-5. **HP** — the fill animates on a 0.5s curve while a pale ghost bar lags behind it.
-
----
-
-## About the 64-frame animation
-
-The spec asks for `steps(64)` over 0.6s. A single-axis `steps(64)` only works on a 1×64 strip; the supplied art is an 8×8 grid. So `fxFrames` is generated as **64 discrete stops at 9.375ms each** (0.6s ÷ 64) with `step-end` timing — mathematically the same thing, exact frame count, and no JS timer in the hot path. Each frame is `background-position: -col×cell -row×cell`.
-
-Two things were done to make the supplied atlases read at phone size:
-
-- **Tinted offline.** The originals are pale smoke; a CSS filter turned them yellow and blown out. The RGB is now baked crimson / gold / ice-blue in the PNGs, with the alpha untouched, so `mix-blend-mode: screen` gives exact hue on black.
-- **Feathered per cell.** Each 64px cell's alpha is eased to zero toward its borders, so the grid’s seams never show as a rectangle.
-
-Three rotated copies (0°, 124°, 238°, with -42ms and -86ms offsets) stack into one dense burst instead of a single faint pass.
-
----
-
-## Rules and numbers
-
-- Player: 74 HP, 3 AP, power 7.
-- The Hollow Knight: 112 HP, power 4 — hits for ~10, heavy for ~17.
-- Card damage = base + 35% of power, ±8% variance, 15% chance of a 1.6× crit.
-- A good hand kills in 3–5 turns; a bad one gets you killed. Playing cards you cannot afford shakes the card and refuses the click.
-
-All of it lives in `ENEMY_BASE`, `PLAYER_BASE` and `CARD_POOL` at the top of `app.js`.
+```
+┌──────────────────────────────┐  30  status bar   TURN · fuse · grave · deck
+│  THE IRON KNIGHT   ATK DEF   │  94  foe card     HP, soul, pips, intent tell
+│  ░░░░░░░░░░░░░░░░  HP 320    │
+├──────────────────────────────┤
+│                              │
+│            ◇ I ◇             │ 216  arena        sigil, roman numeral, lattice,
+│         (FX live here)       │                   damage beams, shards, callouts
+│                              │
+├──────────────────────────────┤
+│  THE UNNAMED      ATK DEF    │  98  your card   HP, soul, EP pips, fuse, status
+├──────────────────────────────┤
+│  ┌────┐ ┌────┐ ┌────┐        │ 100  hand         3 × 108 px skill cards,
+│  │HEX │ │BLK │ │DRAIN│       │                   tilt, cost badge, drag to play
+│  └────┘ └────┘ └────┘        │
+├──────────────────────────────┤
+│  [ ATTACK ]  [ GUARD ]  [FL] │  46  actions      thumb zone
+└──────────────────────────────┘
+```
 
 ---
 
 ## Controls
 
-Tap everything. On desktop: `1`–`5` play a card, `Space` basic attack, `E` end turn.
+- **Tap a skill card** or **drag it upward** into the arena to play it.
+- **ATTACK** / **GUARD** fire directly from the action bar.
+- **Tap your card during the discard ritual** to choose what enters the grave.
+- **Tap the soul bar** to inspect the grave.
+- **FLEE** ends the duel immediately (counts as a loss).
+- Sound is off until the first interaction, then toggled by the speaker glyph in the status bar.
 
-Haptics fire through `Telegram.WebApp.HapticFeedback` on select, hit, crit and verdict, and silently no-op outside Telegram.
+---
+
+## Meta progression
+
+Wins are stored in `localStorage` and drive the frame tier that wraps both cards and the verdict seal:
+
+| Wins | Frame | Accent |
+| --- | --- | --- |
+| 0–2 | BRONZE | warm brass |
+| 3–6 | SILVER | cold steel |
+| 7–11 | CYBER-NEON | cyan / magenta |
+| 12+ | MYTHIC | gold + violet holo |
+
+Shards accrue per duel (~10–60) and are displayed on the verdict panel as the long-term currency hook.
+
+---
+
+## Share card
+
+`SHARE REPLAY CARD` composes a 1080 × 1350 verdict card on an offscreen canvas — title, MVP line, damage/turns/shards, frame tier — then hands it to `Telegram.WebApp.shareToStory` when available. Otherwise the card is revealed in-app with a copyable caption, so the moment is never lost to a missing API.
+
+---
+
+## Files
+
+```
+index.html   markup, SVG sprite, inline icons
+style.css    design system: glass, frames, cards, arena, verdict, motion
+app.js       state machine, combat math, FX engine, audio, haptics, persistence
+```
+
+No dependencies. No fonts fetched at runtime (Cinzel and Inter fall back to the system serif/sans stack if unavailable).
+
+---
+
+## Deploying inside Telegram
+
+1. Serve the folder over HTTPS (any static host).
+2. In BotFather: `/newapp` → point at that URL.
+3. Open from the bot menu — the app calls `ready`, `expand`, `disableVerticalSwipes`, and requests fullscreen where supported.
+
+Outside Telegram it degrades cleanly: haptics no-op, `MainButton` is replaced by the in-page action bar, share falls back to the in-app card.
+
+## Pixel skill icons
+
+The ten current skills now use Dani Melich’s transparent 32×32 pixel artwork, packed into a game-specific atlas. Glass frames, holographic effects, tilt, costs and combat mechanics are unchanged. Icons render at native resolution with nearest-neighbour scaling.
+
+| Skill | Artwork |
+| --- | --- |
+| Heavy Slash | Earth impact |
+| Mirror Parry | Arcane orbit |
+| Iron Guard | Earth fist |
+| Soul Rend | Shadow projectile |
+| Ember Lance | Fire eruption |
+| Hex Bind | Shadow portal |
+| Blood Tithe | Shadow eye |
+| Phantom Step | Wind slash |
+| Grave Bloom | Nature growth |
+| Last Light | Holy beam |
+
+Only artwork used by this game is included; the original 30-icon pack and spritesheet are not redistributed. See `assets/CREDITS.txt` for attribution and license terms.
