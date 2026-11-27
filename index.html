@@ -1,205 +1,24 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#000000">
-<title>VANTHA — Duel</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<svg class="sprite" aria-hidden="true" focusable="false">
-  <symbol id="i-hour" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.4V12l3.1 1.9"/></symbol>
-  <symbol id="i-grave" viewBox="0 0 24 24"><path d="M6 20V9a6 6 0 0 1 12 0v11z"/><path d="M4 20h16M10.5 10h3M12 8.5v3"/></symbol>
-  <symbol id="i-deck" viewBox="0 0 24 24"><rect x="8.5" y="4" width="9" height="13" rx="1.6"/><path d="M6.2 7.2v10.4A2.4 2.4 0 0 0 8.6 20h6.2"/></symbol>
-  <symbol id="i-sword" viewBox="0 0 24 24"><path d="M19.4 4.6 11 13l-1.8-1.8 8.4-8.4 2.6-.6z"/><path d="M9.4 11.4 4 16.8 6.2 19l5.4-5.4"/><path d="M15.6 8.4l-2.2 2.2"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.4 5 6.2v6.2c0 4.2 3 7.1 7 8.4 4-1.3 7-4.2 7-8.4V6.2z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></symbol>
-  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V3.6"/><path d="M6 4.4h11.6l-2.4 3.8 2.4 3.8H6z"/></symbol>
-  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.8l1.9 6.1 6.1 1.9-6.1 1.9L12 18.8l-1.9-6.1L4 10.8l6.1-1.9z"/></symbol>
-  <symbol id="i-chain" viewBox="0 0 24 24"><path d="M9.4 14.6 14.6 9.4"/><path d="M8 12 6.4 13.6a3.4 3.4 0 0 0 4.8 4.8l1.6-1.6"/><path d="M16 12l1.6-1.6a3.4 3.4 0 0 0-4.8-4.8L11.2 7.2"/></symbol>
-  <symbol id="i-skull" viewBox="0 0 24 24"><path d="M12 3.2c-4.2 0-7 2.9-7 6.6 0 2.3 1 3.9 2.3 4.9V18h9.4v-3.3c1.3-1 2.3-2.6 2.3-4.9 0-3.7-2.8-6.6-7-6.6z"/><path d="M9.4 20.2v-2.2M14.6 20.2v-2.2"/><circle cx="9.4" cy="9.8" r="1.2"/><circle cx="14.6" cy="9.8" r="1.2"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.4l2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8l6-.8z"/></symbol>
-  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15.6V4.4M8.4 8 12 4.4 15.6 8"/><path d="M5.6 13.4v4.8a1.8 1.8 0 0 0 1.8 1.8h9.2a1.8 1.8 0 0 0 1.8-1.8v-4.8"/></symbol>
-  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4.6 9.4h3.2L12.6 5v14L7.8 14.6H4.6z"/><path d="M15.8 9.2a4 4 0 0 1 0 5.6"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/></symbol>
-  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4.6 9.4h3.2L12.6 5v14L7.8 14.6H4.6z"/><path d="M16.4 9.6l4.4 4.8M20.8 9.6l-4.4 4.8"/></symbol>
-  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5.6M6.4 11.2 12 5.6l5.6 5.6"/></symbol>
-  <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 17.6h16L18.6 8l-4 3.6L12 5.4 9.4 11.6 5.4 8z"/><path d="M4 17.6v2h16v-2"/></symbol>
-  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.4 2.6 5.6 13.4h5.2l-1.2 8 8.8-11.4h-5.4z"/></symbol>
-  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.6 12S6 6.2 12 6.2 21.4 12 21.4 12 18 17.8 12 17.8 2.6 12 2.6 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
-  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 21c3.6 0 6-2.4 6-5.6 0-4.4-4.2-5.8-4.2-9.4 0 0-3.2.8-3.2 4.2 0 1.6-1.4 1.8-1.4.2C9.2 8 8 9.6 8 11.4 6.9 12.7 6 14 6 15.4 6 18.6 8.4 21 12 21z"/></symbol>
-</svg>
-
-<main class="stage" id="stage">
-  <div class="bg" aria-hidden="true">
-    <span class="bg__bloom bg__bloom--gold"></span>
-    <span class="bg__bloom bg__bloom--violet"></span>
-    <span class="bg__bloom bg__bloom--crimson"></span>
-    <span class="bg__stars"></span>
-    <span class="bg__grain"></span>
-    <span class="bg__climax" id="bg-climax"></span>
-  </div>
-
-  <!-- ─────────── STATUS BAR ─────────── -->
-  <header class="bar glass">
-    <div class="bar__turn">
-      <span class="bar__k">TURN</span>
-      <b class="bar__n" id="turn-num">1</b><span class="bar__of">/5</span>
-      <span class="bar__pips" id="turn-pips">
-        <i class="is-on"></i><i></i><i></i><i></i><i></i>
-      </span>
-    </div>
-    <div class="bar__clock">
-      <svg class="ico ico--12"><use href="#i-hour"/></svg>
-      <b id="timer">15</b><span class="bar__s">s</span>
-    </div>
-    <div class="bar__counts">
-      <span class="chip" title="Graveyard">
-        <svg class="ico ico--11"><use href="#i-grave"/></svg><b id="grave-count">0</b>
-      </span>
-      <span class="chip" title="Deck">
-        <svg class="ico ico--11"><use href="#i-deck"/></svg><b id="deck-count">10</b>
-      </span>
-      <button class="bar__sound" id="btn-sound" aria-label="Sound">
-        <svg class="ico ico--12" id="sound-ico"><use href="#i-sound"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- ─────────── OPPONENT ─────────── -->
-  <section class="slot slot--foe">
-    <div class="tilt" id="foe-tilt">
-      <span class="aura" id="foe-aura" aria-hidden="true">
-        <span class="aura__ring"></span><span class="aura__ring aura__ring--b"></span>
-      </span>
-      <article class="mc mc--foe" id="foe-card">
-        <span class="mc__frame" aria-hidden="true"></span>
-        <span class="mc__foil" aria-hidden="true"></span>
-        <div class="mc__head">
-          <span class="mc__crest" aria-hidden="true"><svg class="ico"><use href="#i-skull"/></svg></span>
-          <span class="mc__id">
-            <b class="mc__name" id="foe-name">THE HOLLOW KNIGHT</b>
-            <span class="mc__tag" id="foe-tag">SILVER · GUARDIAN</span>
-          </span>
-          <span class="ep" id="foe-ep" aria-label="Energy"></span>
-        </div>
-        <div class="hp">
-          <div class="hp__track"><i class="hp__ghost" id="foe-hp-ghost"></i><i class="hp__fill" id="foe-hp-fill"></i></div>
-          <span class="hp__num" id="foe-hp-num">320</span>
-        </div>
-        <div class="mc__stats">
-          <span class="st"><span class="st__k">ATK</span><b class="st__v" id="foe-atk">85</b></span>
-          <span class="st"><span class="st__k">DEF</span><b class="st__v" id="foe-def">40</b></span>
-          <span class="st st--soul"><span class="st__k">SOUL</span><i class="soul"><i id="foe-soul"></i></i></span>
-        </div>
-        <span class="mc__tagline" id="foe-tell">READING THE GLASS</span>
-      </article>
-    </div>
-  </section>
-
-  <!-- ─────────── ARENA ─────────── -->
-  <section class="arena" id="arena">
-    <span class="arena__lattice" aria-hidden="true"></span>
-    <span class="arena__num" id="arena-num" aria-hidden="true">I</span>
-    <span class="arena__sigil" aria-hidden="true"><i></i><b></b></span>
-    <span class="arena__lane arena__lane--t" aria-hidden="true"></span>
-    <span class="arena__lane arena__lane--b" aria-hidden="true"></span>
-    <span class="arena__c tl" aria-hidden="true"></span>
-    <span class="arena__c tr" aria-hidden="true"></span>
-    <span class="arena__c bl" aria-hidden="true"></span>
-    <span class="arena__c br" aria-hidden="true"></span>
-    <canvas id="fx" class="arena__fx"></canvas>
-    <div class="callout" id="callout" aria-live="polite"></div>
-  </section>
-
-  <!-- ─────────── YOU ─────────── -->
-  <section class="slot slot--me">
-    <div class="tilt" id="me-tilt">
-      <span class="aura aura--self" id="me-aura" aria-hidden="true">
-        <span class="aura__ring"></span><span class="aura__ring aura__ring--b"></span>
-      </span>
-      <article class="mc mc--me" id="me-card">
-        <span class="mc__frame" id="me-frame" aria-hidden="true"></span>
-        <span class="mc__foil" aria-hidden="true"></span>
-        <div class="mc__head">
-          <span class="mc__crest" aria-hidden="true"><svg class="ico"><use href="#i-shield"/></svg></span>
-          <span class="mc__id">
-            <b class="mc__name" id="me-name">THE UNNAMED</b>
-            <span class="mc__tag" id="me-tag">BRONZE · ASHBOUND</span>
-          </span>
-          <span class="ep" id="me-ep" aria-label="Energy"></span>
-        </div>
-        <div class="hp">
-          <div class="hp__track"><i class="hp__ghost" id="me-hp-ghost"></i><i class="hp__fill" id="me-hp-fill"></i></div>
-          <span class="hp__num" id="me-hp-num">400</span>
-        </div>
-        <div class="mc__stats">
-          <span class="st"><span class="st__k">ATK</span><b class="st__v" id="me-atk">90</b></span>
-          <span class="st"><span class="st__k">DEF</span><b class="st__v" id="me-def">35</b></span>
-          <span class="st st--soul"><span class="st__k">SOUL</span><i class="soul"><i id="me-soul"></i></i></span>
-        </div>
-        <span class="mc__tagline" id="me-tell">READY</span>
-        <span class="fuse" id="fuse"><i id="fuse-fill"></i></span>
-      </article>
-    </div>
-  </section>
-
-  <!-- ─────────── HAND ─────────── -->
-  <section class="hand" id="hand" aria-label="Skill cards"></section>
-
-  <!-- ─────────── ACTIONS ─────────── -->
-  <nav class="actions" id="actions">
-    <button class="act act--atk" id="btn-attack">
-      <svg class="ico ico--16"><use href="#i-sword"/></svg>
-      <span class="act__t">ATTACK</span><span class="act__c">+2 EP</span>
-    </button>
-    <button class="act act--guard" id="btn-guard">
-      <svg class="ico ico--16"><use href="#i-shield"/></svg>
-      <span class="act__t">GUARD</span><span class="act__c">+2 EP</span>
-    </button>
-    <button class="act act--flee" id="btn-flee">
-      <svg class="ico ico--14"><use href="#i-flag"/></svg>
-      <span class="act__t">FLEE</span>
-    </button>
-  </nav>
-
-  <div class="toast" id="toast" role="status"></div>
-  <div class="flash" id="flash" aria-hidden="true"></div>
-</main>
-
-<!-- ─────────── VERDICT ─────────── -->
-<div class="verdict" id="verdict" role="dialog" aria-modal="true" aria-labelledby="verdict-title">
-  <span class="verdict__rays" aria-hidden="true"></span>
-  <div class="verdict__panel glass">
-    <span class="verdict__eyebrow" id="verdict-eyebrow">DUEL COMPLETE</span>
-    <h1 class="verdict__title" id="verdict-title">THE KNIGHT FALLS</h1>
-    <div class="verdict__mvp">
-      <span class="verdict__k">MVP MOMENT</span>
-      <p id="mvp-text">Turn 3 — Mirror Parry reflected 80 damage.</p>
-    </div>
-    <div class="verdict__stats">
-      <span><b id="v-dmg">0</b><i>DAMAGE</i></span>
-      <span><b id="v-turns">5</b><i>TURNS</i></span>
-      <span><b id="v-shards">+0</b><i>SHARDS</i></span>
-    </div>
-    <button class="verdict__btn" id="btn-rematch">
-      <svg class="ico ico--15"><use href="#i-bolt"/></svg> REMATCH
-    </button>
-    <div class="verdict__row">
-      <button class="verdict__ghost" id="btn-share">
-        <svg class="ico ico--13"><use href="#i-share"/></svg> SHARE REPLAY CARD
-      </button>
-      <button class="verdict__ghost" id="btn-close">
-        <svg class="ico ico--13"><use href="#i-eye"/></svg> INSPECT
-      </button>
-    </div>
-    <span class="verdict__frame" id="v-frame">FRAME · BRONZE <b id="v-wins">0</b> WINS</span>
-  </div>
-</div>
-
-<script src="app.js"></script>
-</body>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE TIDE: PROOF OF VALUE</title>
+    <meta name="description" content="Survival horror gladiator card duel system for THE TIDE: PROOF OF VALUE." />
+    <meta property="og:title" content="THE TIDE: PROOF OF VALUE" />
+    <meta property="og:description" content="Survival horror gladiator card duel system for THE TIDE: PROOF OF VALUE." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-[#0B0D12] text-[#E8E8F0] antialiased selection:bg-[#C41E3A]/40 selection:text-[#E8E8F0]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
+

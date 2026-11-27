@@ -1,0 +1,685 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cinzel", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  color-scheme: dark;
+  --tide-bg: #000000;
+  --tide-card: #14161F;
+  --tide-text: #E8E8F0;
+}
+
+body {
+  background-color: #000000;
+  color: #E8E8F0;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Harsh overhead arena spotlight & crimson atmosphere */
+.arena-spotlight {
+  background:
+    radial-gradient(ellipse 68% 48% at 50% 42%, rgba(255, 255, 255, 0.05) 0%, transparent 55%),
+    radial-gradient(circle at 50% 46%, rgba(196, 30, 58, 0.16) 0%, rgba(80, 6, 18, 0.08) 38%, rgba(0, 0, 0, 1) 72%);
+}
+
+/* Claustrophobic dark vignette around viewport edges */
+.arena-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 44%,
+    rgba(0, 0, 0, 0.58) 74%,
+    rgba(0, 0, 0, 0.96) 100%
+  );
+  box-shadow: inset 0 0 110px rgba(0, 0, 0, 0.96);
+}
+
+/* Blood-red glowing serif phase title */
+.turn-title-glow {
+  color: #D41C3B;
+  text-shadow:
+    0 0 14px rgba(212, 28, 59, 0.95),
+    0 0 34px rgba(196, 30, 58, 0.65),
+    0 2px 6px rgba(0, 0, 0, 0.98);
+}
+
+.turn-title-glow-opp {
+  color: #9E3446;
+  text-shadow:
+    0 0 12px rgba(158, 52, 70, 0.75),
+    0 2px 6px rgba(0, 0, 0, 0.98);
+}
+
+.turn-title-glow-clash {
+  color: #E5B95C;
+  text-shadow:
+    0 0 16px rgba(229, 185, 92, 0.85),
+    0 0 36px rgba(196, 30, 58, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.98);
+}
+
+/* Pulsing crimson radial gradient behind the two monolith cards */
+@keyframes crimson-arena-pulse {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+/* Full-screen impact shake when an Attack resolves */
+@keyframes screen-shake {
+  0% { transform: translate3d(0, 0, 0); }
+  12% { transform: translate3d(-10px, 6px, 0) rotate(-0.6deg); }
+  25% { transform: translate3d(10px, -6px, 0) rotate(0.6deg); }
+  38% { transform: translate3d(-8px, -4px, 0) rotate(-0.4deg); }
+  52% { transform: translate3d(8px, 4px, 0) rotate(0.4deg); }
+  68% { transform: translate3d(-4px, 2px, 0); }
+  84% { transform: translate3d(4px, -2px, 0); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+
+/* 2.5D Yu-Gi-Oh Playmat Perspective & Tilted Obsidian Slab */
+.playmat-perspective {
+  perspective: 1000px;
+  perspective-origin: 50% 42%;
+}
+
+.playmat-table {
+  transform: rotateX(30deg);
+  transform-style: preserve-3d;
+  transform-origin: 50% 52%;
+  background-image: url('/assets/aistudio/Top_down_view_of_a_dark_cracked_stone_arena_table_dark_fanta_7c500be5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Dark semi-transparent overlay + radial/inset edge fade into pitch-black */
+.playmat-surface-scrim {
+  background-color: rgba(0, 0, 0, 0.42);
+  background-image: radial-gradient(
+    ellipse 86% 86% at 50% 50%,
+    rgba(0, 0, 0, 0.14) 36%,
+    rgba(0, 0, 0, 0.72) 74%,
+    #000000 100%
+  );
+  box-shadow:
+    inset 0 0 46px 22px #000000,
+    inset 0 0 18px 8px rgba(0, 0, 0, 0.96);
+}
+
+/* Carved rune / recessed metallic slot embedded in the obsidian table */
+.rune-slot {
+  background: linear-gradient(180deg, rgba(8, 10, 15, 0.86) 0%, rgba(14, 16, 23, 0.78) 100%);
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.96),
+    inset 0 0 0 1px rgba(138, 146, 168, 0.24),
+    0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.rune-slot-active-player {
+  background: linear-gradient(180deg, rgba(28, 21, 10, 0.92) 0%, rgba(16, 13, 8, 0.94) 100%);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.9),
+    inset 0 0 0 1.5px rgba(218, 165, 62, 0.85),
+    0 0 22px rgba(218, 165, 62, 0.35);
+}
+
+.rune-slot-active-opponent {
+  background: linear-gradient(180deg, rgba(30, 10, 14, 0.92) 0%, rgba(18, 7, 10, 0.94) 100%);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.9),
+    inset 0 0 0 1.5px rgba(196, 30, 58, 0.85),
+    0 0 22px rgba(196, 30, 58, 0.4);
+}
+
+.rune-slot-drag-target {
+  background: linear-gradient(180deg, rgba(34, 24, 10, 0.94) 0%, rgba(18, 14, 8, 0.95) 100%);
+  box-shadow:
+    inset 0 2px 10px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 1.5px rgba(255, 191, 0, 0.92),
+    0 0 28px rgba(255, 191, 0, 0.5);
+}
+
+/* Heavy forged metallic / stone action buttons */
+.stone-btn {
+  background: linear-gradient(180deg, #272B38 0%, #171A24 48%, #0C0E14 100%);
+  border: 1px solid #3A4054;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.92),
+    0 6px 16px rgba(0, 0, 0, 0.95);
+}
+
+.stone-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #323747 0%, #1D212D 50%, #101219 100%);
+  border-color: #565F7A;
+}
+
+.stone-btn:active:not(:disabled) {
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.96),
+    0 2px 6px rgba(0, 0, 0, 0.95);
+  transform: translateY(1px);
+}
+
+.stone-btn-attack-active {
+  background: linear-gradient(180deg, #8F152A 0%, #5C0B19 52%, #33050D 100%);
+  border: 1px solid #E23854;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 180, 190, 0.28),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.85),
+    0 0 22px rgba(196, 30, 58, 0.65),
+    0 6px 16px rgba(0, 0, 0, 0.95);
+}
+
+.stone-btn-guard-active {
+  background: linear-gradient(180deg, #1E5438 0%, #113422 52%, #081C12 100%);
+  border: 1px solid #50C878;
+  box-shadow:
+    inset 0 1px 0 rgba(180, 255, 210, 0.25),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(80, 200, 120, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.95);
+}
+
+.stone-btn-flee-active {
+  background: linear-gradient(180deg, #134B57 0%, #0A2E36 52%, #05181D 100%);
+  border: 1px solid #00CED1;
+  box-shadow:
+    inset 0 1px 0 rgba(180, 250, 255, 0.25),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(0, 206, 209, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.95);
+}
+
+.stone-btn-gold {
+  background: linear-gradient(180deg, #E2A93B 0%, #A9741A 52%, #68440A 100%);
+  border: 1px solid #FFD470;
+  color: #090704;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 204, 0.65),
+    inset 0 -3px 6px rgba(45, 26, 2, 0.85),
+    0 0 26px rgba(226, 169, 59, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.96);
+}
+
+/* Heavy forged metallic bezel for Character & Skill Cards */
+.iron-card-frame {
+  border: 2px solid #484E64;
+  background: linear-gradient(145deg, #1C202C 0%, #10121A 48%, #090B10 100%);
+}
+
+.tarot-back-pattern {
+  background-color: #0A0B10;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(196, 30, 58, 0.12) 0px,
+      rgba(196, 30, 58, 0.12) 1px,
+      transparent 1px,
+      transparent 7px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(196, 30, 58, 0.12) 0px,
+      rgba(196, 30, 58, 0.12) 1px,
+      transparent 1px,
+      transparent 7px
+    ),
+    radial-gradient(circle at 50% 50%, rgba(196, 30, 58, 0.22) 0%, #07080C 78%);
+}
+
+.hand-camera-tilt {
+  transform: perspective(900px) rotateX(-16deg);
+  transform-origin: bottom center;
+}
+
+/* Player card pops closer toward the camera for crisp text readability */
+.player-card-elevated {
+  transform: translate3d(0, 0, 18px) scale(1.06);
+}
+
+.opponent-card-rest {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Player (bottom) lifts off playmat (translateZ 50px), flies across center, slams into opponent */
+@keyframes lunge-player {
+  0% {
+    transform: translate3d(0, 0, 18px) scale(1.06);
+  }
+  30% {
+    transform: translate3d(0, -18%, 50px) scale(1.12);
+  }
+  100% {
+    transform: translate3d(0, -112%, 50px) scale(1.14);
+  }
+}
+
+/* Opponent (top) lifts off playmat (translateZ 50px), flies across center, slams into player */
+@keyframes lunge-opponent {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  30% {
+    transform: translate3d(0, 18%, 50px) scale(1.1);
+  }
+  100% {
+    transform: translate3d(0, 112%, 50px) scale(1.16);
+  }
+}
+
+@keyframes recoil-player {
+  0% {
+    transform: translate3d(0, -112%, 50px) scale(1.14);
+  }
+  100% {
+    transform: translate3d(0, 0, 18px) scale(1.06);
+  }
+}
+
+@keyframes recoil-opponent {
+  0% {
+    transform: translate3d(0, 112%, 50px) scale(1.16);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Defending card recoils backward on hit */
+@keyframes defend-recoil-player {
+  0% {
+    transform: translate3d(0, 0, 18px) scale(1.06);
+  }
+  30% {
+    transform: translate3d(0, 18px, -12px) scale(0.98);
+  }
+  65% {
+    transform: translate3d(0, 8px, 6px) scale(1.03);
+  }
+  100% {
+    transform: translate3d(0, 0, 18px) scale(1.06);
+  }
+}
+
+@keyframes defend-recoil-opponent {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  30% {
+    transform: translate3d(0, -18px, -22px) scale(0.94);
+  }
+  65% {
+    transform: translate3d(0, -8px, -8px) scale(0.98);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Skill card flies from bottom hand, rotates, and slams directly into player's Skill Card Zone */
+@keyframes skill-slam-player {
+  0% {
+    opacity: 0;
+    transform: translate3d(40px, 190px, 100px) rotate(-35deg) scale(1.38);
+  }
+  58% {
+    opacity: 1;
+    transform: translate3d(0, -8px, 42px) rotate(6deg) scale(1.12);
+  }
+  82% {
+    transform: translate3d(0, 2px, 4px) rotate(-2deg) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 6px) rotate(0deg) scale(1);
+  }
+}
+
+/* Opponent skill card flies from top, rotates, and slams directly into opponent's Skill Card Zone */
+@keyframes skill-slam-opponent {
+  0% {
+    opacity: 0;
+    transform: translate3d(-40px, -180px, 100px) rotate(35deg) scale(1.38);
+  }
+  58% {
+    opacity: 1;
+    transform: translate3d(0, 8px, 42px) rotate(-6deg) scale(1.12);
+  }
+  82% {
+    transform: translate3d(0, -2px, 4px) rotate(2deg) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 6px) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes card-glow-anticipation {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes impact-flash {
+  0% { opacity: 0; }
+  30% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+@keyframes float-damage {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.8);
+  }
+  22% {
+    opacity: 1;
+    transform: translate3d(0, -12px, 0) scale(1.16);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -52px, 0) scale(0.95);
+  }
+}
+
+@keyframes draw-phase-banner {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0) scale(0.94);
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  78% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) scale(0.98);
+  }
+}
+
+/* Floating battle log text drifting up from center and fading away */
+@keyframes drift-message-up {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.96);
+  }
+  15% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  75% {
+    opacity: 0.92;
+    transform: translate3d(0, -34px, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -64px, 0) scale(0.98);
+  }
+}
+
+/* Speech bubble pop for emotes */
+@keyframes speech-bubble-pop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.85);
+  }
+  12% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  85% {
+    opacity: 1;
+    transform: translate3d(0, -2px, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) scale(0.95);
+  }
+}
+
+@keyframes death-crack {
+  0% { opacity: 0; transform: scale(0.96); }
+  30% { opacity: 1; transform: scale(1.02); }
+  65% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
+@keyframes shard-fly-0 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(-55px, -65px, 0) rotate(-38deg); }
+}
+@keyframes shard-fly-1 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(52px, -68px, 0) rotate(34deg); }
+}
+@keyframes shard-fly-2 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(-72px, -14px, 0) rotate(-52deg); }
+}
+@keyframes shard-fly-3 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(70px, -10px, 0) rotate(46deg); }
+}
+@keyframes shard-fly-4 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(-60px, 46px, 0) rotate(-29deg); }
+}
+@keyframes shard-fly-5 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(62px, 48px, 0) rotate(41deg); }
+}
+@keyframes shard-fly-6 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(-24px, 76px, 0) rotate(-65deg); }
+}
+@keyframes shard-fly-7 {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(28px, 78px, 0) rotate(58deg); }
+}
+
+@keyframes fade-to-black-card {
+  0% { opacity: 1; filter: saturate(1) brightness(1); }
+  45% { opacity: 0.75; filter: saturate(0.2) brightness(0.6); }
+  100% { opacity: 0.08; filter: saturate(0) brightness(0.12); }
+}
+
+/* Persistent glowing ash smolder at bottom of screen after a card dies */
+@keyframes ash-glow-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes ash-ember-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.7);
+  }
+  25% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--ash-drift, 14px), -95px, 0) scale(0.25);
+  }
+}
+
+.anim-crimson-pulse {
+  animation: crimson-arena-pulse 5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.anim-screen-shake {
+  animation: screen-shake 360ms cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+  will-change: transform;
+}
+
+.anim-lunge-player {
+  animation: lunge-player 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.anim-lunge-opponent {
+  animation: lunge-opponent 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.anim-recoil-player {
+  animation: recoil-player 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+
+.anim-recoil-opponent {
+  animation: recoil-opponent 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+
+.anim-defend-recoil-player {
+  animation: defend-recoil-player 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+
+.anim-defend-recoil-opponent {
+  animation: defend-recoil-opponent 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+
+.anim-skill-slam-player {
+  animation: skill-slam-player 440ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.anim-skill-slam-opponent {
+  animation: skill-slam-opponent 440ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.anim-glow-anticipation {
+  animation: card-glow-anticipation 600ms ease-in-out infinite;
+  will-change: filter;
+}
+
+.anim-impact-flash {
+  animation: impact-flash 100ms ease-out forwards;
+  will-change: opacity;
+}
+
+.anim-float-damage {
+  animation: float-damage 560ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.anim-drift-message {
+  animation: drift-message-up 2400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.anim-draw-phase-banner {
+  animation: draw-phase-banner 1100ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.anim-speech-bubble {
+  animation: speech-bubble-pop 3000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.anim-death-card {
+  animation: fade-to-black-card 1500ms ease-out forwards;
+  will-change: opacity, filter;
+}
+
+.anim-death-crack {
+  animation: death-crack 1500ms ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.anim-shard-0 { animation: shard-fly-0 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-1 { animation: shard-fly-1 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-2 { animation: shard-fly-2 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-3 { animation: shard-fly-3 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-4 { animation: shard-fly-4 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-5 { animation: shard-fly-5 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-6 { animation: shard-fly-6 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+.anim-shard-7 { animation: shard-fly-7 1200ms 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: transform, opacity; }
+
+.anim-ash-glow {
+  animation: ash-glow-pulse 2.4s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.anim-ash-ember {
+  animation: ash-ember-rise 2.8s linear infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-crimson-pulse,
+  .anim-screen-shake,
+  .anim-lunge-player,
+  .anim-lunge-opponent,
+  .anim-recoil-player,
+  .anim-recoil-opponent,
+  .anim-defend-recoil-player,
+  .anim-defend-recoil-opponent,
+  .anim-skill-slam-player,
+  .anim-skill-slam-opponent,
+  .anim-glow-anticipation,
+  .anim-impact-flash,
+  .anim-float-damage,
+  .anim-drift-message,
+  .anim-speech-bubble,
+  .anim-death-card,
+  .anim-death-crack,
+  .anim-ash-glow,
+  .anim-ash-ember,
+  .anim-shard-0,
+  .anim-shard-1,
+  .anim-shard-2,
+  .anim-shard-3,
+  .anim-shard-4,
+  .anim-shard-5,
+  .anim-shard-6,
+  .anim-shard-7 {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+.tide-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.tide-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tide-scroll::-webkit-scrollbar-thumb {
+  background: #272B3A;
+  border-radius: 2px;
+}
+
+/* Game-specific Dani Melich atlas: no smoothing or pointer interference. */
+.tide-skill-icon {
+  display: inline-block;
+  width: 32px; height: 32px; flex: 0 0 32px;
+  background-size: 320px 32px; background-repeat: no-repeat;
+  image-rendering: pixelated; pointer-events: none;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 3px rgba(229, 185, 92, .22));
+}

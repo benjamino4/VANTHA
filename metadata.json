@@ -1,0 +1,8 @@
+{
+  "name": "THE TIDE: PROOF OF VALUE",
+  "description": "Survival horror gladiator card duel system for THE TIDE: PROOF OF VALUE.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
